@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://dd4ebhng0h4x1"]
+
+[ext_resource type="Script" uid="uid://da53ihrkiq3ee" path="res://addons/base_bigbrain_sys/components/hitbox_component.gd" id="1_wpbfa"]
+
+[node name="HitboxComponent" type="Area2D"]
+script = ExtResource("1_wpbfa")
+metadata/_custom_type_script = "uid://da53ihrkiq3ee"

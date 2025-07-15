@@ -1,0 +1,115 @@
+[gd_scene load_steps=17 format=3 uid="uid://b81pq3fnnmkuw"]
+
+[ext_resource type="Script" uid="uid://bfv4e1ojiq55m" path="res://addons/base_bigbrain_sys/state_machine/enemy/enemy_example.gd" id="1_iwrh4"]
+[ext_resource type="Texture2D" uid="uid://d3hfmdlwdgvl4" path="res://assets/sprites/slime_purple.png" id="1_uaeve"]
+[ext_resource type="Script" uid="uid://c4q4wrhcsv0df" path="res://addons/base_bigbrain_sys/state_machine/state_machine.gd" id="2_ysihh"]
+[ext_resource type="Script" uid="uid://nx1jr5o64hp7" path="res://addons/base_bigbrain_sys/state_machine/enemy/enemy_idle.gd" id="3_iwrh4"]
+[ext_resource type="Script" uid="uid://ckehjnvk03ilu" path="res://addons/base_bigbrain_sys/state_machine/enemy/enemy_follow.gd" id="4_pdmi1"]
+[ext_resource type="Script" uid="uid://bx5mvjmyucune" path="res://addons/base_bigbrain_sys/state_machine/enemy/enemy_flee.gd" id="6_wfhy7"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ru6d8"]
+atlas = ExtResource("1_uaeve")
+region = Rect2(0, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_huf7n"]
+atlas = ExtResource("1_uaeve")
+region = Rect2(24, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_km4b7"]
+atlas = ExtResource("1_uaeve")
+region = Rect2(48, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xb700"]
+atlas = ExtResource("1_uaeve")
+region = Rect2(72, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_p227g"]
+atlas = ExtResource("1_uaeve")
+region = Rect2(72, 24, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4gjg2"]
+atlas = ExtResource("1_uaeve")
+region = Rect2(48, 24, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e1mk2"]
+atlas = ExtResource("1_uaeve")
+region = Rect2(24, 24, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bso80"]
+atlas = ExtResource("1_uaeve")
+region = Rect2(0, 24, 24, 24)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_0lae4"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ru6d8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_huf7n")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_km4b7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xb700")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_p227g")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4gjg2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_e1mk2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bso80")
+}],
+"loop": true,
+"name": &"default",
+"speed": 10.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ysihh"]
+size = Vector2(8, 12)
+
+[node name="Enemy" type="CharacterBody2D"]
+script = ExtResource("1_iwrh4")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, -12)
+sprite_frames = SubResource("SpriteFrames_0lae4")
+autoplay = "default"
+frame = 3
+frame_progress = 0.0717701
+
+[node name="Collider" type="CollisionShape2D" parent="."]
+position = Vector2(0, -6)
+shape = SubResource("RectangleShape2D_ysihh")
+
+[node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("initial_state")]
+script = ExtResource("2_ysihh")
+initial_state = NodePath("EnemyStateIdle")
+metadata/_custom_type_script = "uid://c4q4wrhcsv0df"
+
+[node name="EnemyStateIdle" type="Node" parent="StateMachine" node_paths=PackedStringArray("enemy", "transition_state")]
+script = ExtResource("3_iwrh4")
+enemy = NodePath("../..")
+transition_state = NodePath("../EnemyStateFlee")
+base_speed = 25.0
+metadata/_custom_type_script = "uid://nx1jr5o64hp7"
+
+[node name="EnemyStateFollow" type="Node" parent="StateMachine" node_paths=PackedStringArray("enemy", "transition_state")]
+script = ExtResource("4_pdmi1")
+enemy = NodePath("../..")
+transition_state = NodePath("../EnemyStateIdle")
+base_speed = 50.0
+metadata/_custom_type_script = "uid://ckehjnvk03ilu"
+
+[node name="EnemyStateFlee" type="Node" parent="StateMachine" node_paths=PackedStringArray("enemy", "transition_state")]
+script = ExtResource("6_wfhy7")
+enemy = NodePath("../..")
+transition_state = NodePath("../EnemyStateIdle")
+base_speed = 33.0
+metadata/_custom_type_script = "uid://bx5mvjmyucune"
